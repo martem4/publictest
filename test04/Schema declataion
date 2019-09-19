@@ -1,0 +1,14 @@
+1.It's a good reason to have some HTTP load-balancer(NGINX LB, HAProxy) in front of application server to provide load distribution.
+
+2. For the purposes of high-availabilty it would be better to have application cluster (some of this tasks could be resolved by Kubernetes).
+
+3. Database should have a connection pooler (pgBouncer in case of PostgreSQL), it will save some milliseconds for new connections, because every connection for PosgrteSQL it's a linux process(spending more time for fork-exec instead creating new thread).
+3.1 It's necessary to have "hot" replication server for your database server with some failover mechanism(pgpatroni).
+3.2 Making regular backuping for critical data.
+3.3 For huge tables it's better to make partiotioning.
+3.4 Analyze long running queries and optimize it by indexes or improve query plan.
+3.5 Regular upgrade database.
+
+4. As far as I know the most effective automation of deployment it's a through the Kubernetes. You should just work on your docker iso, push it in your docker registry and make some declarations work in kubernetes configuration yml file. 
+
+5. Essential part of your system is monitoring.  It's better to get measure from critical parts of your system and show it in graphics (prometheus + grafana for example). Every system should be covered by monitoring system.
